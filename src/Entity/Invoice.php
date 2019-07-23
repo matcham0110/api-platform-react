@@ -83,6 +83,7 @@ class Invoice
     /**
      * @ORM\Column(type="integer")
      * @Groups({"invoices_read", "invoices_subresource"})
+     * @Assert\NotBlank(message="le chrono doit être un remplis")
      * @Assert\Type(type="integer", message="le chrono doit être un nombre")
      */
     private $chrono;
