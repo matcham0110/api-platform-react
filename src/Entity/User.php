@@ -14,7 +14,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @ApiResource()
+ * @ApiResource(
+ *  normalizationContext={"groups"={"authentificator"}}
+ * )
  * @UniqueEntity("email", message="Un user avec ce mail existe déja")
  */
 class User implements UserInterface
@@ -23,13 +25,13 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"customers_read"})
+     * @Groups({"customers_read", "authentificator"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"customers_read", "invoices_subresource"})
+     * @Groups({"customers_read", "invoices_subresource", "authentificator"})
      * @Assert\NotBlank(message="L'email doit être renseigné")
      * @Assert\Email(message="L'email doit être un mail")
      */
@@ -49,7 +51,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"customers_read"})
+     * @Groups({"customers_read", "authentificator"})
      * @Assert\NotBlank(message="prénom Obligatoire")
      * @Assert\Length(min="3", minMessage="3 carac min")
      */
@@ -57,7 +59,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"customers_read"})
+     * @Groups({"customers_read", "authentificator"})
      * @Assert\NotBlank(message="prénom Obligatoire")
      * @Assert\Length(min="3", minMessage="3 carac min")
      */
