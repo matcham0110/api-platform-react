@@ -11,6 +11,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 
 use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\InvoiceRepository")
  * @ApiResource(
@@ -30,8 +31,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *   }
  * },
  * attributes={
- *      "pagination_enabled"=true,
- *      "pagination_items_per_page" = 3,
+ *      "pagination_enabled"=false,
+ *      "pagination_items_per_page" = 10,
  *      "order": {"amout": "desc"}
  *  },
  * normalizationContext={"groups"={"invoices_read"}},
@@ -94,7 +95,8 @@ class Invoice
      * 
      * @return User
      */
-    public function getUser() : User {
+    public function getUser(): User
+    {
         return $this->customer->getUser();
     }
 

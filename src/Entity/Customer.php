@@ -13,17 +13,21 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CustomerRepository")
  * @ApiResource(
  *  collectionOperations={"GET", "POST"},
- *  itemOperations={"GET", "PUT"},
+ *  itemOperations={"GET", "PUT", "DELETE"},
  *  subresourceOperations={
  *  "invoices_get_subresource"={"path"="/customers/{id}/invoices"}
  * },
  *  normalizationContext={
  *      "groups"={"customers_read"} 
- * }
+ * },
+ * attributes={
+ *      "pagination_enabled"=false
+ *  }
  * )
  * @ApiFilter(SearchFilter::class, properties={"firstName":"partial", "lastName", "company"})
  * @ApiFilter(OrderFilter::class)
@@ -82,16 +86,17 @@ class Customer
      */
     private $user;
 
-    
+
     /**
      * Permet de récupérer le total des factures
      * @Groups({"customers_read"})
      *
      * @return float
      */
-    public function getTotalAmout(): float {
-        return array_reduce($this->invoices->toArray(), function($total, $invoice) {
-                return $total + $invoice->getAmout();
+    public function getTotalAmout(): float
+    {
+        return array_reduce($this->invoices->toArray(), function ($total, $invoice) {
+            return $total + $invoice->getAmout();
         }, 0);
     }
 
@@ -101,7 +106,8 @@ class Customer
      * 
      * @return float
      */
-    public function getUnpaidAmount(): float {
+    public function getUnpaidAmount(): float
+    {
         return array_reduce($this->invoices->toArray(), function ($total, $invoice) {
             return $total + ($invoice->getStatus() === "PAID" || $invoice->getStatus() === "CANCELLED" ? 0 : $invoice->getAmout());
         }, 0);
