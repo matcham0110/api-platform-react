@@ -2,6 +2,7 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import Pagination from "../components/Pagination";
 import invoicesAPI from "../services/InvoicesAPI";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 const STATUS_CLASSES = {
   PAID: "success",
@@ -76,7 +77,13 @@ const InvoicesPage = props => {
 
   return (
     <>
-      <h1>Liste des factures</h1>
+      <div className="d-flex justify-content-between align-items-center">
+        <h1>Liste des factures</h1>
+        <Link className="btn btn-primary" to="/invoices/new">
+          Créer une facture
+        </Link>
+      </div>
+
       <div className="form-group">
         <input
           type="text"
@@ -116,7 +123,12 @@ const InvoicesPage = props => {
               </td>
               <td>{invoice.amout.toLocaleString()}</td>
               <td>
-                <button className="btn btn-sm btn-success mr-1">Editer</button>{" "}
+                <Link
+                  to={`/invoices/${invoice.id}`}
+                  className="btn btn-sm btn-success mr-1"
+                >
+                  Editer
+                </Link>
                 <button
                   className="btn btn-sm btn-danger"
                   onClick={() => handleDelete(invoice.id)}
