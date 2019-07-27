@@ -12,24 +12,25 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 
-class InvoiceChronoSubscriber implements EventSubscriberInterface {
+class InvoiceChronoSubscriber implements EventSubscriberInterface
+{
 
-      /** @var Security */
-      private $security;
+    /** @var Security */
+    private $security;
 
-      /** @var InvoiceRepository */
-      private $repository;
-      /**
-       * Obtetion d'un composant de sécurité (recup de l'utilisateur courant) et un repository de l'invoice
-       *
-       * @param Security $security
-       * @param InvoiceRepository $repository
-       */
-      public function __construct(Security $security, InvoiceRepository $repository) 
-      {
-          $this->security = $security; 
-          $this->repository = $repository;
-      }
+    /** @var InvoiceRepository */
+    private $repository;
+    /**
+     * Obtetion d'un composant de sécurité (recup de l'utilisateur courant) et un repository de l'invoice
+     *
+     * @param Security $security
+     * @param InvoiceRepository $repository
+     */
+    public function __construct(Security $security, InvoiceRepository $repository)
+    {
+        $this->security = $security;
+        $this->repository = $repository;
+    }
 
     public static function getSubscribedEvents()
     {
@@ -38,10 +39,11 @@ class InvoiceChronoSubscriber implements EventSubscriberInterface {
         ];
     }
 
-    public function setChronoForInvoice(GetResponseForControllerResultEvent $event) {
+    public function setChronoForInvoice(GetResponseForControllerResultEvent $event)
+    {
         $invoice = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
-    
+
         if ($invoice instanceof Invoice && $method === "POST") {
             $chrono = $this->repository->findNextChrono($this->security->getUser());
             $invoice->setChrono($chrono);
