@@ -3,6 +3,7 @@ import Field from "../components/forms/Field";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import axios from "axios";
 import UsersAPI from "../services/usersAPI";
+import { toast } from "react-toastify";
 
 const RegisterPage = ({ history }) => {
   const [user, setUser] = useState({
@@ -39,6 +40,7 @@ const RegisterPage = ({ history }) => {
       UsersAPI.register(user);
       setErrors({});
       history.replace("/login");
+      toast.success("Vous êtes désormais inscrit");
     } catch (error) {
       const { violations } = error.response.data;
       if (violations) {
@@ -46,6 +48,7 @@ const RegisterPage = ({ history }) => {
           apiErrors[violation.propertyPath] = violation.message;
         });
         setErrors(apiErrors);
+        toast.error("Des erreurs");
       }
     }
     console.log(user);

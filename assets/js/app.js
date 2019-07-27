@@ -1,24 +1,20 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
+import { HashRouter, Route, Switch, withRouter } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import HomePage from "./pages/HomePage";
-import {
-  HashRouter,
-  Switch,
-  Route,
-  withRouter,
-  Redirect
-} from "react-router-dom";
-import CustomersPage from "./pages/CustomersPage";
-import InvoicesPage from "./pages/InvoicesPage";
-import CustomersPageWithApi from "./pages/CustomersPageWithApi";
-import LoginPage from "./pages/LoginPage";
-import AuthApi from "./services/authApi";
-import AuthContext from "./contexts/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
+import AuthContext from "./contexts/AuthContext";
 import CustomerPage from "./pages/CustomerPage";
+import CustomersPage from "./pages/CustomersPage";
+import HomePage from "./pages/HomePage";
 import InvoicePage from "./pages/InvoicePage";
+import InvoicesPage from "./pages/InvoicesPage";
+import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import AuthApi from "./services/authApi";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 AuthApi.setup();
 
 const App = () => {
@@ -49,6 +45,7 @@ const App = () => {
           </Switch>
         </main>
       </HashRouter>
+      <ToastContainer position={toast.POSITION.BOTTOM_LEFT} />
     </AuthContext.Provider>
   );
 };

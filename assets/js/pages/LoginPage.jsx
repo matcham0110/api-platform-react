@@ -4,6 +4,7 @@ import CustomersAPI from "../services/customersAPI";
 import authApi from "../services/authApi";
 import AuthContext from "../contexts/AuthContext";
 import Field from "../components/forms/Field";
+import { toast } from "react-toastify";
 
 const LoginPage = ({ onLogin, history }) => {
   const { setIsAuthenticated } = useContext(AuthContext);
@@ -30,9 +31,11 @@ const LoginPage = ({ onLogin, history }) => {
       await authApi.authenticate(credentials);
       setError("");
       setIsAuthenticated(true);
+      toast.success("Vous êtes connecté ! 🎩");
       history.replace("/customers");
     } catch (error) {
       setError("Aucun compte ne posséde cette combinaison");
+      toast.error("Une erreur est survenue");
     }
     console.log(error);
   };

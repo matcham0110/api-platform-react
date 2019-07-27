@@ -5,5 +5,5 @@ function register(user) {
 }
 
 export default {
-  user
+  register
 };

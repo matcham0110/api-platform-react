@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Field from "../components/forms/Field";
 import { Link } from "react-router-dom";
 import CustomerAPI from "../services/customersAPI";
+import { toast } from "react-toastify";
 
 const CustomerPage = ({ match, history }) => {
   const { id = "new" } = match.params;
@@ -21,6 +22,7 @@ const CustomerPage = ({ match, history }) => {
   });
 
   const [editing, setEditing] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // recupération du customer id
   const fetchCustomer = async id => {
@@ -57,15 +59,17 @@ const CustomerPage = ({ match, history }) => {
     try {
       if (editing) {
         const response = await CustomerAPI.update(id, customer);
-        console.log(response.data);
+        toast.info("Le client à bien été modifié");
       } else {
-        const response = await CustomerAPI.create(customer);
-        // flash notification success
+        await CustomerAPI.create(customer);
+        toast.info("Le client à bien été crée");
+        setErrors({});
         history.replace("/customers");
       }
-      setErrors({});
     } catch ({ response }) {
-      const { violations } = response.data;
+      if (response.data) {
+        const { violations } = response.data;
+      }
 
       if (violations) {
         const apiErrors = {};

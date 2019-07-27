@@ -3,8 +3,9 @@ import Field from "../components/forms/Field";
 import Select from "../components/forms/Select";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import CustomersAPI from "../services/customersAPI";
-import axios from "axios";
 import InvoicesAPI from "../services/InvoicesAPI";
+import { toast } from "react-toastify";
+import TableLoader from "../components/loaders/TableLoader";
 
 // 1. variables props
 // 2. useState variables
@@ -21,6 +22,7 @@ const InvoicePage = ({ history, match }) => {
 
   const [customers, setCustomers] = useState([]);
   const [editing, setEditing] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [errors, setErrors] = useState({
     amout: "",
@@ -48,8 +50,10 @@ const InvoicePage = ({ history, match }) => {
           customer: data[0].id
         });
       }
+      setLoading(false);
     } catch (error) {
       console.log(error.response);
+      toast.error("Error");
       history.replace("/invoices");
     }
   };
@@ -76,7 +80,7 @@ const InvoicePage = ({ history, match }) => {
   const handleSubmit = async event => {
     event.preventDefault();
     console.log(invoice);
-    //await InvoicesAPI.create(invoice);
+
     try {
       if (!editing) {
         const response = await InvoicesAPI.create(invoice);
@@ -94,57 +98,60 @@ const InvoicePage = ({ history, match }) => {
         });
         console.log(violations);
         setErrors(apiErrors);
+        toast.error("Error");
       }
     }
   };
   return (
     <>
-      {" "}
       {(!editing && <h1>Création d'une facture</h1>) || (
         <h1>Modification de la facture {id}</h1>
       )}
-      <form onSubmit={handleSubmit}>
-        <Field
-          name="amout"
-          type="number"
-          placeholder="Montant de la facture"
-          onChange={handleChange}
-          value={invoice.amout}
-          error={errors.amout}
-        />
-        <Select
-          name="customer"
-          label="Client"
-          value={invoice.customer}
-          error={errors.customer}
-          onChange={handleChange}
-        >
-          {customers.map(customer => (
-            <option key={customer.id} value={customer.id}>
-              {customer.firstName} {customer.lastName}
-            </option>
-          ))}
-        </Select>
-        <Select
-          name="status"
-          label="Statut"
-          value={invoice.status}
-          error={errors.status}
-          onChange={handleChange}
-        >
-          <option value="SENT">Envoyé</option>
-          <option value="PAID">Payée</option>
-          <option value="CANCELLED">Annulée</option>
-        </Select>
-        <div className="form-group">
-          <button type="submit" className="btn btn-primary">
-            Enregistrer
-          </button>
-          <Link to="/invoices" className="btn btn-link">
-            Retour
-          </Link>
-        </div>
-      </form>
+      {!loading && (
+        <form onSubmit={handleSubmit}>
+          <Field
+            name="amout"
+            type="number"
+            placeholder="Montant de la facture"
+            onChange={handleChange}
+            value={invoice.amout}
+            error={errors.amout}
+          />
+          <Select
+            name="customer"
+            label="Client"
+            value={invoice.customer}
+            error={errors.customer}
+            onChange={handleChange}
+          >
+            {customers.map(customer => (
+              <option key={customer.id} value={customer.id}>
+                {customer.firstName} {customer.lastName}
+              </option>
+            ))}
+          </Select>
+          <Select
+            name="status"
+            label="Statut"
+            value={invoice.status}
+            error={errors.status}
+            onChange={handleChange}
+          >
+            <option value="SENT">Envoyé</option>
+            <option value="PAID">Payée</option>
+            <option value="CANCELLED">Annulée</option>
+          </Select>
+          <div className="form-group">
+            <button type="submit" className="btn btn-primary">
+              Enregistrer
+            </button>
+            <Link to="/invoices" className="btn btn-link">
+              Retour
+            </Link>
+          </div>
+        </form>
+      )}
+      {loading && <TableLoader />}
     </>
   );
 };
