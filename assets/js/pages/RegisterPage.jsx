@@ -31,17 +31,20 @@ const RegisterPage = ({ history }) => {
   const handleSubmit = async event => {
     event.preventDefault();
     const apiErrors = {};
-    if (user.password === user.passwordConfirm) {
+    console.log(user);
+    if (user.password !== user.passwordConfirm) {
       apiErrors.passwordConfirm =
         "Votre confirmation de mot de passe est fausse";
       setErrors(apiErrors);
+      return;
     }
     try {
-      UsersAPI.register(user);
+      await UsersAPI.register(user);
       setErrors({});
-      history.replace("/login");
       toast.success("Vous êtes désormais inscrit");
+      history.replace("/login");
     } catch (error) {
+      console.log(error);
       const { violations } = error.response.data;
       if (violations) {
         violations.forEach(violation => {
@@ -51,7 +54,6 @@ const RegisterPage = ({ history }) => {
         toast.error("Des erreurs");
       }
     }
-    console.log(user);
   };
 
   return (
