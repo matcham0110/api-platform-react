@@ -1,7 +1,7 @@
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import Pagination from "../components/Pagination";
-import invoicesAPI from "../services/InvoicesAPI";
+import InvoicesAPI from "../services/invoicesAPI";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { toast } from "react-toastify";
 import TableLoader from "../components/loaders/TableLoader";
@@ -38,7 +38,7 @@ const InvoicesPage = props => {
   // Récupération des invoices API
   const fetchInvoices = async () => {
     try {
-      const data = await invoicesAPI.findAll();
+      const data = await InvoicesAPI.findAll();
       setInvoices(data);
       setLoading(false);
     } catch (error) {
@@ -53,7 +53,7 @@ const InvoicesPage = props => {
     setInvoices(invoices.filter(invoice => invoice.id !== id));
 
     try {
-      await invoicesAPI.delete(id);
+      await InvoicesAPI.delete(id);
       toast.success("Supprésion réusie de la facture " + id);
     } catch (error) {
       console.log(error.response);

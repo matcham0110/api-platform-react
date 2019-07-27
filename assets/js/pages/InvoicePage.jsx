@@ -3,7 +3,7 @@ import Field from "../components/forms/Field";
 import Select from "../components/forms/Select";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import CustomersAPI from "../services/customersAPI";
-import InvoicesAPI from "../services/InvoicesAPI";
+import InvoicesAPI from "../services/invoicesAPI";
 import { toast } from "react-toastify";
 import TableLoader from "../components/loaders/TableLoader";
 
